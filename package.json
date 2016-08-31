@@ -1,0 +1,30 @@
+{
+  "name": "demo-auth-users",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "DEBUG=server nodemon ./bin",
+    "start": "node ./bin",
+    "test": "mocha test",
+    "test:watch": "nodemon --exec 'clear && npm test'"
+  },
+  "dependencies": {
+    "bcrypt": "^0.8.7",
+    "body-parser": "~1.15.1",
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.2.0",
+    "express": "~4.13.4",
+    "express-validator": "^2.20.8",
+    "jade": "~1.11.0",
+    "mongoose": "^4.5.10",
+    "morgan": "~1.7.0",
+    "serve-favicon": "~2.3.0",
+    "supertest": "^2.0.0",
+    "validator": "^5.5.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.10.2",
+    "mocha": "^3.0.2",
+    "should": "^11.1.0"
+  }
+}
