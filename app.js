@@ -7,11 +7,14 @@ const bodyParser = require('body-parser');
 const expressValidator = require('express-validator');
 
 const config = require('./config');
+const admin = require('./routes/admin');
 const mongoose = require('mongoose');
 
-const routes = require('./routes/index');
-const users = require('./users/routes');
+const auth = require('./auth/routes');
+const passport = require('passport');
 
+const users = require('./users/routes');
+const ensureAdmin = require('./auth/middlewares').ensureAdmin;
 
 const app = express();
 
@@ -25,17 +28,19 @@ app.set('view engine', 'jade');
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 
 
-app.use(expressValidator);
-app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(expressValidator());
 app.use(cookieParser());
+
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.set('dbUrl', config.db[NODE_ENV]);
 mongoose.connect(app.get('dbUrl'));
 
-app.use('/', routes);
 
 
 app.get('/add/:first/:second', function (req, res) {
@@ -45,7 +50,9 @@ app.get('/add/:first/:second', function (req, res) {
 });
 
 //... routes
-//app.post('/signup', users.signup);
+app.post('/signup', users.signup);
+app.post('/auth/local', auth.local);
+app.get('/admin', ensureAdmin, admin.index);
 
 
 // catch 404 and forward to error handler
@@ -67,6 +74,10 @@ if (NODE_ENV === 'development') {
       error: err
     });
   });
+}
+
+if (NODE_ENV != 'test') {
+  app.use(logger('dev'));
 }
 
 // production error handler

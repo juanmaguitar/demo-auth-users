@@ -1,6 +1,5 @@
 'use strict';
 
-
 //  Modified from https://github.com/elliotf/mocha-mongoose
 var config = require('../config');
 var mongoose = require('mongoose');
@@ -12,14 +11,15 @@ process.env.NODE_ENV = 'test';
 
 beforeEach(function (done) {
 
+  const dbCollections = mongoose.connection.collections;
+  const dbState = mongoose.connection.readyState;
 
   function clearDB() {
-    for (var i in mongoose.connection.collections) {
-      mongoose.connection.collections[i].remove();
+    for (var i in dbCollections) {
+      dbCollections[i].remove();
     }
     return done();
   }
-
 
   function reconnect() {
     mongoose.connect(config.db.test, function (err) {
@@ -32,7 +32,7 @@ beforeEach(function (done) {
 
 
   function checkState() {
-    switch (mongoose.connection.readyState) {
+    switch (dbState) {
     case 0:
       reconnect();
       break;
@@ -43,7 +43,6 @@ beforeEach(function (done) {
       process.nextTick(checkState);
     }
   }
-
 
   checkState();
 });

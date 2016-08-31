@@ -3,10 +3,10 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev": "DEBUG=server nodemon ./bin",
+    "dev": "DEBUG=server,admin nodemon ./bin",
     "start": "node ./bin",
     "test": "mocha test",
-    "test:watch": "nodemon --exec 'clear && npm test'"
+    "test:watch": "DEBUG=admin nodemon --exec 'clear && npm test'"
   },
   "dependencies": {
     "bcrypt": "^0.8.7",
@@ -18,6 +18,8 @@
     "jade": "~1.11.0",
     "mongoose": "^4.5.10",
     "morgan": "~1.7.0",
+    "passport": "^0.3.2",
+    "passport-local": "^1.0.0",
     "serve-favicon": "~2.3.0",
     "supertest": "^2.0.0",
     "validator": "^5.5.0"

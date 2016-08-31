@@ -114,4 +114,33 @@ describe('Users: models', () => {
     });
   });
 
+  describe('#hasRole', function () {
+    // we will set this value in the beforeEach function
+    var user;
+
+    // beforeEach test create a user
+    beforeEach( (done) => {
+      let userTest = { roles: ['admin', 'mod'] };
+      User.create(userTest, (err, createdUser) => {
+        user = createdUser;
+        done();
+      });
+    });
+
+    it('should return true if the user has role', (done) => {
+      user.hasRole('admin').should.be.true;
+      user.hasRole('mod').should.be.true;
+      done();
+    });
+
+    it('should return false if the user does not have role', (done) => {
+      user.hasRole('astronaut').should.be.false;
+      user.hasRole('cowboy').should.be.false;
+      done();
+    });
+
+  });
+
+
+
 });

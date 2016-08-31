@@ -20,7 +20,9 @@ var userSchema = new Schema({
     givenName   : String,
     familyName  : String
   },
-  emails: [emailSchema]
+  emails: [emailSchema],
+  passwordHash: String,
+  roles: Array
 });
 
 userSchema.statics.hashPassword = function (passwordRaw, fn) {
@@ -34,10 +36,14 @@ userSchema.statics.hashPassword = function (passwordRaw, fn) {
   bcrypt.hash(passwordRaw, BCRYPT_COST, fn);
 };
 
-userSchema.statics.comparePasswordAndHash = function (password, passwordHash, fn) {
-  // compare the password to the passwordHash
-  bcrypt.compare(password, passwordHash, fn);
+userSchema.statics.comparePasswordAndHash = (password, passwordHash, fn) => {
+  // compare the password to the comparePasswordAndHash
+  return bcrypt.compare(password, passwordHash, fn);
 };
+
+userSchema.methods.hasRole = function(role) {
+  return this.roles.includes(role);
+}
 
 // Export the User model
 exports.User = mongoose.model('User', userSchema);
